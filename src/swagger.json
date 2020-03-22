@@ -1,0 +1,351 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "",
+    "version": "1.0",
+    "title": "Dasa Challenge - Back"
+  },
+  "host": "localhost:3030",
+  "tags": [
+    {
+      "name": "Laboratory",
+      "description": "Features to handle de laboratory data."
+    },
+    { "name": "Exam", "description": "Features to handle de exam data." }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/laboratory/index/{status}": {
+      "get": {
+        "tags": ["Laboratory"],
+        "summary": "List of all registered laboratories",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["all", "active", "inactive"],
+              "default": "available"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfLaboratory"
+            }
+          }
+        }
+      }
+    },
+    "/laboratory/show/{labId}": {
+      "get": {
+        "tags": ["Laboratory"],
+        "summary": "Get data about a specific laboratory",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "labId",
+            "in": "path",
+            "description": "Laboratory identification code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/Laboratory" }
+          }
+        }
+      }
+    },
+    "/laboratory/store": {
+      "post": {
+        "tags": ["Laboratory"],
+        "summary": "Add one or more laboratories to the repository",
+        "description": "",
+        "operationId": "store",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Array of laboratory object that needs to be added to the repository",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ArrayOfNewLaboratories" }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Action canceled! Invalid input at positions [ ]"
+          }
+        }
+      }
+    },
+    "/laboratory/update": {
+      "put": {
+        "tags": ["Laboratory"],
+        "summary": "Update one or more laboratories in the repository",
+        "description": "",
+        "operationId": "update",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Array of laboratory object that needs to be updated in the repository",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ArrayOfLaboratory" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Action canceled! Invalid ID supplied at positions [ ]"
+          },
+          "404": {
+            "description": "Action canceled! Laboratory not found at positions [ ]"
+          },
+          "405": {
+            "description": "Action canceled! Validation exception at positions [ ]"
+          }
+        }
+      }
+    },
+    "/laboratory/destroy/{labsIds}": {
+      "delete": {
+        "tags": ["Laboratory"],
+        "summary": "Delete one or more laboratories in the repository",
+        "description": "",
+        "operationId": "destroy",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "labsIds",
+            "in": "path",
+            "description": "String with laboratories IDs (separete by '|') that needs to be deleted at the repository",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Action canceled! Invalid ID supplied at positions [ ]"
+          },
+          "404": {
+            "description": "Action canceled! Laboratory not found at positions [ ]"
+          }
+        }
+      }
+    },
+
+    "/exam/index/{status}": {
+      "get": {
+        "tags": ["Exam"],
+        "summary": "List of all registered exams",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["all", "active", "inactive"],
+              "default": "available"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfExam"
+            }
+          }
+        }
+      }
+    },
+    "/exam/show/{examId}": {
+      "get": {
+        "tags": ["Exam"],
+        "summary": "Get data about a specific exam",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examId",
+            "in": "path",
+            "description": "Exam identification code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/Exam" }
+          }
+        }
+      }
+    },
+    "/exam/store": {
+      "post": {
+        "tags": ["Exam"],
+        "summary": "Add one or more exams to the repository",
+        "description": "",
+        "operationId": "store",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Array of exam object that needs to be added to the repository",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ArrayOfNewExams" }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Action canceled! Invalid input at positions [ ]"
+          }
+        }
+      }
+    },
+    "/exam/update": {
+      "put": {
+        "tags": ["Exam"],
+        "summary": "Update one or more exams in the repository",
+        "description": "",
+        "operationId": "update",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Array of exam object that needs to be updated in the repository",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ArrayOfExam" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Action canceled! Invalid ID supplied at positions [ ]"
+          },
+          "404": {
+            "description": "Action canceled! Exam not found at positions [ ]"
+          },
+          "405": {
+            "description": "Action canceled! Validation exception at positions [ ]"
+          }
+        }
+      }
+    },
+    "/exam/destroy/{examsIds}": {
+      "delete": {
+        "tags": ["Exam"],
+        "summary": "Delete one or more exams in the repository",
+        "description": "",
+        "operationId": "destroy",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examsIds",
+            "in": "path",
+            "description": "String with exams IDs (separete by '|') that needs to be deleted at the repository",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Action canceled! Invalid ID supplied at positions [ ]"
+          },
+          "404": {
+            "description": "Action canceled! Exam not found at positions [ ]"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Laboratory": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "int64" },
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "status": { "type": "boolean" }
+      }
+    },
+    "Exam": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "int64" },
+        "name": { "type": "string" },
+        "typeCode": { "type": "integer", "format": "int64" },
+        "status": { "type": "boolean" }
+      }
+    },
+    "Type": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "int64" },
+        "description": { "type": "string" }
+      }
+    },
+    "Rel_Exam_To_Lab": {
+      "laboratoryCode": { "type": "integer", "format": "int64" },
+      "examCode": { "type": "integer", "format": "int64" }
+    },
+    "ArrayOfLaboratory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/definitions/Laboratory"
+      }
+    },
+    "ArrayOfNewLaboratories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "address": { "type": "string" }
+        }
+      }
+    },
+    "ArrayOfExam": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/definitions/Exam"
+      }
+    },
+    "ArrayOfNewExams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "typeCode": { "type": "integer", "format": "int64" }
+        }
+      }
+    }
+  }
+}
