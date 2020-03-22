@@ -3,7 +3,6 @@ const routes = express.Router();
 const ctrlExam = require("./app/controllers/examController");
 const ctrlLaboratory = require("./app/controllers/laboratoryController");
 
-//Adicionar a possibilidade de listar os ativos
 routes.get("/laboratory/index/:status", ctrlLaboratory.index);
 routes.get("/laboratory/show/:labId", ctrlLaboratory.show);
 routes.post("/laboratory/store", ctrlLaboratory.store);
