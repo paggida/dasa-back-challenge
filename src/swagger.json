@@ -453,7 +453,7 @@
         "description": { "type": "string" }
       }
     },
-    "Rel_Exam_To_Lab": {
+    "RelExamToLab": {
       "type": "object",
       "properties": {
         "laboratoryCode": { "type": "string" },
