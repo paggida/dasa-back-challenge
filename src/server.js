@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const youch = require("youch");
 const appConfig = require("./config/app");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 
 class App {
   constructor() {
@@ -22,6 +24,11 @@ class App {
   }
   routes() {
     this.express.use(require("./routes"));
+    this.express.use(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
+    );
   }
   exception() {
     /* In production returns standard error, in other environments

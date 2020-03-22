@@ -1,6 +1,7 @@
 module.exports = {
   index(req, res) {
-    return res.json({ message: "Not implemented" });
+    const { status } = req.params;
+    return res.json({ status, message: "Not implemented" });
   },
   show(req, res) {
     const { examId } = req.params;
