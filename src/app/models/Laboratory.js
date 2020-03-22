@@ -11,19 +11,12 @@ const LaboratorySchema = new mongoose.Schema({
   },
   status: {
     type: Boolean,
-    required: true,
+    required: true
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
-})
-
-LaboratorySchema.pre('save', (next) => {
-  if (!this.status) {
-    this.status = true;
-  }
-  return next()
 })
 
 module.exports = mongoose.model('Laboratory', LaboratorySchema)

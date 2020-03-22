@@ -1,5 +1,5 @@
 module.exports = {
-  all: null,
+  all: 'all',
   active: true,
   inactive: false
 };

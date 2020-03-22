@@ -1,28 +1,51 @@
+const Laboratory = require("../models/Laboratory")
+const ctrlFnc = require("../functions/controllersFunctions")
+
 module.exports = {
-  index(req, res) {
-    const { status } = req.params;
-    return res.json({ status, message: "Not implemented" });
+  async index(req, res) {
+    const { status }   = req.params;
+    const filter       = ctrlFnc.getIndexFilterByStatus(status)
+
+    const laboratories = await Laboratory.find(filter);
+
+    return res.json(laboratories);
   },
-  show(req, res) {
-    const { labId } = req.params;
-    return res.json({ labId, message: "Not implemented" });
+  async show(req, res) {
+    const { labId }  = req.params;
+
+    const laboratory = await Laboratory.findById(labId);
+
+    return res.json(laboratory);
   },
-  store(req, res) {
-    const body = req.body;
-    return res.json({
-      body: { ...body, status: true },
-      message: "Not implemented"
-    });
+  async store(req, res) {
+    const createdLabs = [];
+
+    for (let lab of req.body) {
+      createdLabs.push(await Laboratory.create({ ...lab, status: true}));
+    }
+
+    return res.json(createdLabs);
   },
-  update(req, res) {
-    const body = req.body;
-    return res.json({ body, message: "Not implemented" });
+  async update(req, res) {
+    const updatedLabs = [];
+
+    for (let {id, ...lab} of req.body) {
+      updatedLabs.push(await Laboratory.findByIdAndUpdate(id, lab, {
+        new: true
+      }))
+    }
+
+    return res.json(updatedLabs);
   },
-  destroy(req, res) {
+  async destroy(req, res) {
     const { labsIds } = req.params;
-    return res.json({ labsIds, message: "Not implemented" });
+    const deletedLabs = ctrlFnc.getIdsArrayByStream(labsIds, "|");
+
+    for (let id of deletedLabs) await Laboratory.findByIdAndDelete(id);
+
+    return res.status(200).send();
   },
-  getByExamName(req, res) {
+  async getByExamName(req, res) {
     const { examName } = req.params;
     return res.json({ examName, message: "Not implemented" });
   }
