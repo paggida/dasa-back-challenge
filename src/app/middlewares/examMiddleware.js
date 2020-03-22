@@ -3,10 +3,6 @@ const apiExceptions = require("../Exceptions/apiExceptions");
 const valfnc = require("../functions/validationFunctions");
 
 module.exports = {
-  show(req, res, next) {
-    return next();
-    //return res.status(Code).json({ error: "Token inválido" });
-  },
   store(req, res, next) {
     return next();
     //return res.status(Code).json({ error: "Token inválido" });
