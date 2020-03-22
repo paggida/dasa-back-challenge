@@ -22,12 +22,12 @@ module.exports = {
     const { examsIds } = req.params;
     return res.json({ examsIds, message: "Not implemented" });
   },
-  connectLaboratory(req, res) {
+  linkLaboratory(req, res) {
     const { examId } = req.params;
     const body = req.body;
     return res.json({ examId, body, message: "Not implemented" });
   },
-  disconnectLaboratory(req, res) {
+  unlinkLaboratory(req, res) {
     const { examId } = req.params;
     const body = req.body;
     return res.json({ examId, body, message: "Not implemented" });

@@ -18,9 +18,6 @@ routes.post("/exam/store", ctrlExam.store);
 routes.put("/exam/update", ctrlExam.update);
 routes.delete("/exam/destroy/:examsIds", ctrlExam.destroy);
 
-routes.post("/exam/:examId/connectLaboratory", ctrlExam.connectLaboratory);
-routes.delete(
-  "/exam/:examId/disconnectLaboratory",
-  ctrlExam.disconnectLaboratory
-);
+routes.post("/exam/:examId/linkLaboratory", ctrlExam.linkLaboratory);
+routes.delete("/exam/:examId/unlinkLaboratory", ctrlExam.unlinkLaboratory);
 module.exports = routes;
