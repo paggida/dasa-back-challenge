@@ -1,6 +1,8 @@
-const express = require("express");
 const cors = require("cors");
 const youch = require("youch");
+const express = require("express");
+const mongoose = require('mongoose');
+const dbConfig = require('./config/database')
 const appConfig = require("./config/app");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
@@ -9,10 +11,17 @@ class App {
   constructor() {
     this.express = express();
 
+    this.database();
     this.middlewares();
     this.security();
     this.routes();
     this.exception();
+  }
+  database () {
+    mongoose.connect(dbConfig.uri(), {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
   }
   middlewares() {
     this.express.use(express.json());
