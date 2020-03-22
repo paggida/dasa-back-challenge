@@ -132,7 +132,7 @@
             }
           },
           "405": {
-            "description": "Action canceled! Validation exception at positions:",
+            "description": "Action canceled! Invalid input at positions:",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -312,7 +312,7 @@
             }
           },
           "405": {
-            "description": "Action canceled! Validation exception at positions:",
+            "description": "Action canceled! Invalid input at positions:",
             "schema": {
               "$ref": "#/definitions/Error"
             }
