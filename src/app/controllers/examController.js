@@ -1,4 +1,5 @@
 const Exam = require("../models/Exam")
+const ExamToLab = require("../models/RelExamToLab")
 const ctrlFnc = require("../functions/controllersFunctions")
 
 module.exports = {
@@ -46,13 +47,21 @@ module.exports = {
     return res.status(200).send();
   },
   async linkLaboratory(req, res) {
-    const { examId } = req.params;
-    const body = req.body;
-    return res.json({ examId, body, message: "Not implemented" });
+    const { examId: examCode } = req.params;
+
+    for (let laboratoryCode of req.body) {
+      await ExamToLab.create({ examCode, laboratoryCode});
+    }
+
+    return res.status(200).send();
   },
   async unlinkLaboratory(req, res) {
-    const { examId } = req.params;
-    const body = req.body;
-    return res.json({ examId, body, message: "Not implemented" });
+    const { examId: examCode } = req.params;
+
+    for (let laboratoryCode of req.body) {
+      await ExamToLab.findOneAndDelete({ examCode, laboratoryCode});
+    }
+
+    return res.status(200).send();
   }
 };
