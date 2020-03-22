@@ -1,6 +1,7 @@
 const Exam = require("../models/Exam")
 const ExamToLab = require("../models/RelExamToLab")
 const ctrlFnc = require("../functions/controllersFunctions")
+const valFnc = require("../functions/validationFunctions")
 
 module.exports = {
   async index(req, res) {
@@ -15,8 +16,9 @@ module.exports = {
     const { examId } = req.params;
 
     const exam = await Exam.findById(examId);
+    const { code, message } =  valFnc.getValidatedResponse(exam, 2);
 
-    return res.json(exam);
+    return res.status(code).json({ message });
   },
   async store(req, res) {
     const createdExams = [];

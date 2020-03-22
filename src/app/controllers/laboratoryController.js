@@ -1,5 +1,6 @@
 const Laboratory = require("../models/Laboratory")
 const ctrlFnc = require("../functions/controllersFunctions")
+const valFnc = require("../functions/validationFunctions")
 
 module.exports = {
   async index(req, res) {
@@ -14,8 +15,9 @@ module.exports = {
     const { labId }  = req.params;
 
     const laboratory = await Laboratory.findById(labId);
+    const { code, message } =  valFnc.getValidatedResponse(laboratory, 4);
 
-    return res.json(laboratory);
+    return res.status(code).json({ message });
   },
   async store(req, res) {
     const createdLabs = [];
