@@ -24,11 +24,7 @@ class App {
   }
   routes() {
     this.express.use(require("./routes"));
-    this.express.use(
-      "/api-docs",
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument)
-    );
+    this.express.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
   exception() {
     /* In production returns standard error, in other environments

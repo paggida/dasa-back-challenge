@@ -41,6 +41,12 @@
             "schema": {
               "$ref": "#/definitions/ArrayOfLaboratory"
             }
+          },
+          "400": {
+            "description": "Action canceled! Invalid status",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -64,6 +70,12 @@
           "200": {
             "description": "successful operation",
             "schema": { "$ref": "#/definitions/Laboratory" }
+          },
+          "404": {
+            "description": "Action canceled! Laboratory not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -87,7 +99,10 @@
         ],
         "responses": {
           "405": {
-            "description": "Action canceled! Invalid input at positions [ ]"
+            "description": "Action canceled! Invalid input at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -110,14 +125,17 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Action canceled! Invalid ID supplied at positions [ ]"
-          },
           "404": {
-            "description": "Action canceled! Laboratory not found at positions [ ]"
+            "description": "Action canceled! Laboratory not found at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           },
           "405": {
-            "description": "Action canceled! Validation exception at positions [ ]"
+            "description": "Action canceled! Validation exception at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -139,16 +157,44 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Action canceled! Invalid ID supplied at positions [ ]"
-          },
           "404": {
-            "description": "Action canceled! Laboratory not found at positions [ ]"
+            "description": "Action canceled! Laboratory not found at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
     },
-
+    "/exam/{examName}/laboratories": {
+      "get": {
+        "tags": ["Laboratory"],
+        "summary": "Get all the laboratories linked to a specific exam",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examName",
+            "in": "path",
+            "description": "Exam name identification code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/ArrayOfLaboratory" }
+          },
+          "404": {
+            "description": "Action canceled! Exam name not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/exam/index/{status}": {
       "get": {
         "tags": ["Exam"],
@@ -175,6 +221,12 @@
             "schema": {
               "$ref": "#/definitions/ArrayOfExam"
             }
+          },
+          "400": {
+            "description": "Action canceled! Invalid status",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -198,6 +250,12 @@
           "200": {
             "description": "successful operation",
             "schema": { "$ref": "#/definitions/Exam" }
+          },
+          "404": {
+            "description": "Action canceled! Exam not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -221,7 +279,10 @@
         ],
         "responses": {
           "405": {
-            "description": "Action canceled! Invalid input at positions [ ]"
+            "description": "Action canceled! Invalid input at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -244,14 +305,17 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Action canceled! Invalid ID supplied at positions [ ]"
-          },
           "404": {
-            "description": "Action canceled! Exam not found at positions [ ]"
+            "description": "Action canceled! Exam not found at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           },
           "405": {
-            "description": "Action canceled! Validation exception at positions [ ]"
+            "description": "Action canceled! Validation exception at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -273,11 +337,91 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Action canceled! Invalid ID supplied at positions [ ]"
-          },
           "404": {
-            "description": "Action canceled! Exam not found at positions [ ]"
+            "description": "Action canceled! Exam not found at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/exam/{examId}/linkLaboratory": {
+      "post": {
+        "tags": ["Exam"],
+        "summary": "Link one or more laboratories to a specific exam",
+        "description": "",
+        "operationId": "linkLaboratory",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examId",
+            "in": "path",
+            "description": "Exam identification code",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Array of id laboratory that needs to be link",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ArrayOfIdLaboratories" }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Action canceled! Exam not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "405": {
+            "description": "Action canceled! Invalid input at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/exam/{examId}/unlinkLaboratory": {
+      "delete": {
+        "tags": ["Exam"],
+        "summary": "Unlink one or more laboratories to a specific exam",
+        "description": "",
+        "operationId": "unlinkLaboratory",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examId",
+            "in": "path",
+            "description": "Exam identification code",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Array of id laboratory that needs to be unlink",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ArrayOfIdLaboratories" }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Action canceled! Exam not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "405": {
+            "description": "Action canceled! Invalid input at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         }
       }
@@ -287,7 +431,7 @@
     "Laboratory": {
       "type": "object",
       "properties": {
-        "id": { "type": "integer", "format": "int64" },
+        "id": { "type": "string" },
         "name": { "type": "string" },
         "address": { "type": "string" },
         "status": { "type": "boolean" }
@@ -296,22 +440,25 @@
     "Exam": {
       "type": "object",
       "properties": {
-        "id": { "type": "integer", "format": "int64" },
+        "id": { "type": "string" },
         "name": { "type": "string" },
-        "typeCode": { "type": "integer", "format": "int64" },
+        "typeCode": { "type": "string" },
         "status": { "type": "boolean" }
       }
     },
     "Type": {
       "type": "object",
       "properties": {
-        "id": { "type": "integer", "format": "int64" },
+        "id": { "type": "string" },
         "description": { "type": "string" }
       }
     },
     "Rel_Exam_To_Lab": {
-      "laboratoryCode": { "type": "integer", "format": "int64" },
-      "examCode": { "type": "integer", "format": "int64" }
+      "type": "object",
+      "properties": {
+        "laboratoryCode": { "type": "string" },
+        "examCode": { "type": "string" }
+      }
     },
     "ArrayOfLaboratory": {
       "type": "array",
@@ -330,6 +477,12 @@
         }
       }
     },
+    "ArrayOfIdLaboratories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "ArrayOfExam": {
       "type": "array",
       "items": {
@@ -343,7 +496,20 @@
         "type": "object",
         "properties": {
           "name": { "type": "string" },
-          "typeCode": { "type": "integer", "format": "int64" }
+          "typeCode": { "type": "string" }
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "message": { "type": "string" },
+        "positions": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
         }
       }
     }
