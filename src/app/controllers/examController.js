@@ -1,33 +1,56 @@
+const Exam = require("../models/Exam")
+const ctrlFnc = require("../functions/controllersFunctions")
+
 module.exports = {
-  index(req, res) {
+  async index(req, res) {
     const { status } = req.params;
-    return res.json({ status, message: "Not implemented" });
+    const filter     = ctrlFnc.getIndexFilterByStatus(status)
+
+    const exams = await Exam.find(filter);
+
+    return res.json(exams);
   },
-  show(req, res) {
+  async show(req, res) {
     const { examId } = req.params;
-    return res.json({ examId, message: "Not implemented" });
+
+    const exam = await Exam.findById(examId);
+
+    return res.json(exam);
   },
-  store(req, res) {
-    const body = req.body;
-    return res.json({
-      body: { ...body, status: true },
-      message: "Not implemented"
-    });
+  async store(req, res) {
+    const createdExams = [];
+
+    for (let exam of req.body) {
+      createdExams.push(await Exam.create({ ...exam, status: true}));
+    }
+
+    return res.json(createdExams);
   },
-  update(req, res) {
-    const body = req.body;
-    return res.json({ body, message: "Not implemented" });
+  async update(req, res) {
+    const updatedExams = [];
+
+    for (let {id, ...exam} of req.body) {
+      updatedExams.push(await Exam.findByIdAndUpdate(id, exam, {
+        new: true
+      }))
+    }
+
+    return res.json(updatedExams);
   },
-  destroy(req, res) {
+  async destroy(req, res) {
     const { examsIds } = req.params;
-    return res.json({ examsIds, message: "Not implemented" });
+    const deletedExams = ctrlFnc.getIdsArrayByStream(examsIds, "|");
+
+    for (let id of deletedExams) await Exam.findByIdAndDelete(id);
+
+    return res.status(200).send();
   },
-  linkLaboratory(req, res) {
+  async linkLaboratory(req, res) {
     const { examId } = req.params;
     const body = req.body;
     return res.json({ examId, body, message: "Not implemented" });
   },
-  unlinkLaboratory(req, res) {
+  async unlinkLaboratory(req, res) {
     const { examId } = req.params;
     const body = req.body;
     return res.json({ examId, body, message: "Not implemented" });
