@@ -1,6 +1,7 @@
 const express        = require("express");
 const routes         = express.Router();
 const ctrlExam       = require("./app/controllers/examController");
+const ctrlExamType   = require("./app/controllers/examTypeController");
 const ctrlLaboratory = require("./app/controllers/laboratoryController");
 const mdlLab         = require("./app/middlewares/laboratoryMiddleware");
 const mdlExam        = require("./app/middlewares/examMiddleware");
@@ -22,5 +23,10 @@ routes.delete("/exam/destroy/:examsIds", mdlExam.destroy, ctrlExam.destroy);
 
 routes.post("/exam/:examId/linkLaboratory", mdlExam.linkLaboratory, ctrlExam.linkLaboratory);
 routes.delete("/exam/:examId/unlinkLaboratory", mdlExam.unlinkLaboratory, ctrlExam.unlinkLaboratory);
+
+routes.get("/exam/type/index", ctrlExamType.index);
+routes.get("/exam/type/show/:examTypeId", ctrlExamType.show);
+routes.post("/exam/type/install", ctrlExamType.store);
+routes.delete("/exam/type/uninstall", ctrlExamType.destroy);
 
 module.exports = routes;

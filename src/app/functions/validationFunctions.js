@@ -4,7 +4,7 @@ const apiExceptions = require("../Exceptions/apiExceptions");
 
 module.exports = {
   getValidatedResponse(obj,emptyErrorCode){
-    if(!isEmptyObj(obj)){
+    if(!this.isEmptyObj(obj)){
       return {code: 200, message: obj}
     }else{
       return e.throwException(emptyErrorCode, apiExceptions);

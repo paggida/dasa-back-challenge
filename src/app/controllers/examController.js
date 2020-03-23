@@ -8,14 +8,14 @@ module.exports = {
     const { status } = req.params;
     const filter     = ctrlFnc.getIndexFilterByStatus(status)
 
-    const exams = await Exam.find(filter);
+    const exams = await Exam.find(filter).populate("examTypeCode");
 
     return res.json(exams);
   },
   async show(req, res) {
     const { examId } = req.params;
 
-    const exam = await Exam.findById(examId);
+    const exam = await Exam.findById(examId).populate("examTypeCode");
     const { code, message } =  valFnc.getValidatedResponse(exam, 2);
 
     return res.status(code).json({ message });

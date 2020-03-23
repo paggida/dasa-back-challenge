@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
-const TypeSchema = new mongoose.Schema({
+const ExamTypeSchema = new mongoose.Schema({
   description: {
     type: String,
-    unique: true,
     required: true
   },
   createdAt: {
@@ -12,4 +11,4 @@ const TypeSchema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('Type', TypeSchema)
+module.exports = mongoose.model('ExamType', ExamTypeSchema)

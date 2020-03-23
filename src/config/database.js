@@ -8,5 +8,11 @@ module.exports = {
   uri(){
     const login = (user && psw)?`${user}:${psw}@`:"";
     return `mongodb://${login}${host}:${port}/${db}`
+  },
+  getDefaultExamTypes(){
+    return [
+      "Análise clínica",
+      "Imagem"
+    ]
   }
 }

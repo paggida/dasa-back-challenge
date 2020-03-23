@@ -2,10 +2,10 @@ const Exam = require("../models/Exam")
 
 module.exports = {
   isValidExamObj(obj){
-    return (obj.name && obj.typeCode)? true : false;
+    return (obj.name && obj.examTypeCode)? true : false;
   },
-  async isExistentExam({name, typeCode}){
-    const response = await Exam.findOne({ name, typeCode })
+  async isExistentExam({name, examTypeCode}){
+    const response = await Exam.findOne({ name, examTypeCode })
     return response? true : false;
   }
 };

@@ -11,7 +11,8 @@
       "name": "Laboratory",
       "description": "Features to handle de laboratory data."
     },
-    { "name": "Exam", "description": "Features to handle de exam data." }
+    { "name": "Exam", "description": "Features to handle de exam data." },
+    { "name": "ExamType", "description": "Features to handle de exam type data." }
   ],
   "schemes": ["http"],
   "paths": {
@@ -437,6 +438,79 @@
           }
         }
       }
+    },
+    "/exam/type/index": {
+      "get": {
+        "tags": ["ExamType"],
+        "summary": "List of all registered type exams",
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfExamType"
+            }
+          }
+        }
+      }
+    },
+    "/exam/type/show/{examTypeId}": {
+      "get": {
+        "tags": ["ExamType"],
+        "summary": "Get data about a specific type txam",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examTypeId",
+            "in": "path",
+            "description": "Type exam identification code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/ExamType" }
+          },
+          "404": {
+            "description": "Action canceled! Exam type not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/exam/type/install": {
+      "post": {
+        "tags": ["ExamType"],
+        "summary": "Initializes the repository with the standard exam types of the application",
+        "description": "",
+        "operationId": "store",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/exam/type/uninstall": {
+      "delete": {
+        "tags": ["ExamType"],
+        "summary": "Removes the repository with the standard exam types of the application",
+        "description": "",
+        "operationId": "destroy",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -455,12 +529,12 @@
       "properties": {
         "_id": { "type": "string" },
         "name": { "type": "string" },
-        "typeCode": { "type": "string" },
+        "examTypeCode": { "type": "string" },
         "status": { "type": "boolean" },
         "createdAt": { "type": "string", "format":"date-time" }
       }
     },
-    "Type": {
+    "ExamType": {
       "type": "object",
       "properties": {
         "_id": { "type": "string" },
@@ -512,8 +586,15 @@
         "type": "object",
         "properties": {
           "name": { "type": "string" },
-          "typeCode": { "type": "string" }
+          "examTypeCode": { "type": "string" }
         }
+      }
+    },
+    "ArrayOfExamType": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/definitions/ExamType"
       }
     },
     "Error": {

@@ -5,9 +5,9 @@ const ExamSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  typeCode: {
+  examTypeCode: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Type',
+    ref: 'ExamType',
     required: true
   },
   status: {

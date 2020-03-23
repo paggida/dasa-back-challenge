@@ -10,6 +10,7 @@ module.exports = {
     if(Array.isArray(req.body)){
       invalidExamsId = await valFnc.getInvalidObjIndexInArray(req.body, examFnc.isValidExamObj);
       existentExamsId = await valFnc.getValidObjIndexInArray(req.body, examFnc.isExistentExam);
+
       if(valFnc.isEmptyArray(invalidExamsId) && valFnc.isEmptyArray(existentExamsId)){
         return next();
       }
