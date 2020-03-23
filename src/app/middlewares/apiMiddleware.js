@@ -1,11 +1,11 @@
 const e = require("../functions/exceptionFunctions");
 const apiExceptions = require("../Exceptions/apiExceptions");
-const valfnc = require("../functions/validationFunctions");
+const valFnc = require("../functions/validationFunctions");
 
 module.exports = {
   index(req, res, next) {
     const { status } = req.params;
-    if(valfnc.isValidStatus(status)){
+    if(valFnc.isValidStatus(status)){
       return next();
     }
     else{
