@@ -46,29 +46,15 @@ module.exports = {
     return res.status(200).send();
   },
   async linkLaboratory(req, res) {
-    const { examId } = req.params;
-
-    const exam = await Exam.findById(examId);
-
-    if(!exam){
-      const { code, message } = e.throwException(2, apiExceptions);
-      return res.status(code).json({ message });
-    }
+    const { exam } = req;
 
     const newLaboratoryCode = valFnc.mergeArrayWithoutRepeatItem(exam.laboratoryCode, req.body);
-    await Exam.findByIdAndUpdate( examId, { laboratoryCode : newLaboratoryCode})
+    await Exam.findByIdAndUpdate( exam.id, { laboratoryCode : newLaboratoryCode})
 
     return res.status(200).send();
   },
   async unlinkLaboratory(req, res) {
-    const { examId } = req.params;
-
-    const exam = await Exam.findById(examId);
-
-    if(!exam){
-      const { code, message } = e.throwException(2, apiExceptions);
-      return res.status(code).json({ message });
-    }
+    const { exam } = req;
 
     req.body.map((item)=> exam.laboratoryCode.remove(item) );
 

@@ -2,6 +2,7 @@ const Exam = require("../models/Exam");
 const e = require("../functions/exceptionFunctions");
 const apiExceptions = require("../Exceptions/apiExceptions");
 const examFnc = require("../functions/examFunctions");
+const labFnc = require("../functions/laboratoryFunctions");
 const valFnc = require("../functions/validationFunctions");
 const ctrlFnc = require("../functions/controllersFunctions");
 
@@ -79,8 +80,26 @@ module.exports = {
     }
   },
   async linkAndUnlinkLab(req, res, next) {
+    const { examId } = req.params;
 
+    const exam = await Exam.findById(examId);
 
+    if(!exam){
+      const { code, message } = e.throwException(2, apiExceptions);
+      return res.status(code).json({ message });
+    }
+
+    const objIdArray         = valFnc.convertStringToIdObj(req.body)
+    const existentLabsIndex  = await valFnc.getValidObjIndexInArray(objIdArray, labFnc.isExistentLaboratoryById);
+    const positionsInRequest = valFnc.getAllPositionsInArray(req.body);
+    const invalidPosition    = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
+
+    if(invalidPosition.length){
+      const { code, message} = e.throwException(7, apiExceptions);
+      return res.status(code).json({ message, position : invalidPosition });
+    }
+
+    req.exam = exam;
     return next();
   },
   getLabsByExamName(req, res, next) {
