@@ -31,12 +31,12 @@ module.exports = {
 
       if(valFnc.isEmptyArray(invalidExamsIndex)){
         existentExamsIndex = await valFnc.getValidObjIndexInArray(req.body, examFnc.isExistentExamById);
+        const positionsInRequest = valFnc.getAllPositionsInArray(req.body);
+        const invalidPosition = valFnc.getDifferentItemsInArrays(existentExamsIndex, positionsInRequest);
 
-        if(!valFnc.isEmptyArray(existentExamsIndex)){
+        if(invalidPosition.length){
           const { code, message} = e.throwException(6, apiExceptions);
-
-          const position = valFnc.getDifferentItemsInArrays(existentExamsIndex, valFnc.getAllPositionsInArray(req.body));
-          return res.status(code).json({ message, position });
+          return res.status(code).json({ message, position : invalidPosition });
         }else{
           return next();
         }
