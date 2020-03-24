@@ -2,6 +2,7 @@ const e = require("../functions/exceptionFunctions");
 const apiExceptions = require("../Exceptions/apiExceptions");
 const labFnc = require("../functions/laboratoryFunctions");
 const valFnc = require("../functions/validationFunctions");
+const ctrlFnc = require("../functions/controllersFunctions");
 
 module.exports = {
   async store(req, res, next) {
@@ -35,7 +36,7 @@ module.exports = {
         const invalidPosition = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
 
         if(invalidPosition.length){
-          const { code, message} = e.throwException(6, apiExceptions);
+          const { code, message} = e.throwException(7, apiExceptions);
           return res.status(code).json({ message, position : invalidPosition });
         }else{
           return next();
@@ -46,8 +47,19 @@ module.exports = {
     const { code, message} = e.throwException(5, apiExceptions);
     return res.status(code).json({ message, position : invalidLabsIndex });
   },
-  destroy(req, res, next){
-    return next();
-    //return res.status(Code).json({ error: "Token inválido" });
+  async destroy(req, res, next){
+    const { labsIds } = req.params;
+    const requestDeletedLabs = ctrlFnc.getIdsArrayByStream(labsIds, "|");
+    const deletedlabsIds = valFnc.convertStringToIdObj(requestDeletedLabs);
+    const positionsInRequest = valFnc.getAllPositionsInArray(deletedlabsIds);
+    const existentLabsIndex = await valFnc.getValidObjIndexInArray(deletedlabsIds, labFnc.isExistentLaboratoryById);
+    const invalidPosition = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
+
+    if(invalidPosition.length){
+      const { code, message} = e.throwException(7, apiExceptions);
+      return res.status(code).json({ message, position : invalidPosition });
+    }else{
+      return next();
+    }
   }
 };

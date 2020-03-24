@@ -2,6 +2,7 @@ const e = require("../functions/exceptionFunctions");
 const apiExceptions = require("../Exceptions/apiExceptions");
 const examFnc = require("../functions/examFunctions");
 const valFnc = require("../functions/validationFunctions");
+const ctrlFnc = require("../functions/controllersFunctions");
 
 module.exports = {
   async store(req, res, next) {
@@ -46,9 +47,20 @@ module.exports = {
       const { code, message} = e.throwException(5, apiExceptions);
       return res.status(code).json({ message, position : invalidExamsIndex });
   },
-  destroy(req, res, next) {
-    return next();
-    //return res.status(Code).json({ error: "Token inválido" });
+  async destroy(req, res, next) {
+    const { examsIds } = req.params;
+    const requestDeletedExams = ctrlFnc.getIdsArrayByStream(examsIds, "|");
+    const deletedExamsIds = valFnc.convertStringToIdObj(requestDeletedExams);
+    const positionsInRequest = valFnc.getAllPositionsInArray(deletedExamsIds);
+    const existentExamsIndex = await valFnc.getValidObjIndexInArray(deletedExamsIds, examFnc.isExistentExamById);
+    const invalidPosition = valFnc.getDifferentItemsInArrays(existentExamsIndex, positionsInRequest);
+
+    if(invalidPosition.length){
+      const { code, message} = e.throwException(6, apiExceptions);
+      return res.status(code).json({ message, position : invalidPosition });
+    }else{
+      return next();
+    }
   },
   linkLaboratory(req, res, next) {
     return next();

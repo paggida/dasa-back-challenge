@@ -50,5 +50,10 @@ module.exports = {
   },
   removeRepeatedItemsInArray(array){
     return array.filter((item, i) => array.indexOf(item) === i);
+  },
+  convertStringToIdObj(array){
+    return array.map(item=>{
+      return { id: item }
+    })
   }
 };
