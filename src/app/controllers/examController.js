@@ -1,4 +1,6 @@
 const Exam = require("../models/Exam");
+const e = require("../functions/exceptionFunctions");
+const apiExceptions = require("../Exceptions/apiExceptions");
 const ctrlFnc = require("../functions/controllersFunctions");
 const valFnc = require("../functions/validationFunctions");
 
@@ -15,9 +17,12 @@ module.exports = {
     const { examId } = req.params;
 
     const exam = await Exam.findById(examId).populate(["examTypeCode","laboratoryCode"]);
-    const { code, message } =  valFnc.getValidatedResponse(exam, 2);
 
-    return res.status(code).json({ message });
+    if(!exam){
+      const { code, message } = e.throwException(2, apiExceptions);
+      return res.status(code).json({ message });
+    }
+    return res.status(200).json(exam);
   },
   async store(req, res) {
     const createdExams = [];
@@ -61,6 +66,10 @@ module.exports = {
     const { examId } = req.params;
 
     const exam = await Exam.findById(examId);
+
+    const { code, message } =  valFnc.getValidatedResponse(exam, 2);
+
+    if(code = 200)
 
     req.body.map((item)=> exam.laboratoryCode.remove(item) );
 

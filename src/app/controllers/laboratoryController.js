@@ -1,6 +1,8 @@
-const Laboratory = require("../models/Laboratory")
-const ctrlFnc = require("../functions/controllersFunctions")
-const valFnc = require("../functions/validationFunctions")
+const Laboratory = require("../models/Laboratory");
+const e = require("../functions/exceptionFunctions");
+const apiExceptions = require("../Exceptions/apiExceptions");
+const ctrlFnc = require("../functions/controllersFunctions");
+
 
 module.exports = {
   async index(req, res) {
@@ -15,9 +17,12 @@ module.exports = {
     const { labId }  = req.params;
 
     const laboratory = await Laboratory.findById(labId);
-    const { code, message } =  valFnc.getValidatedResponse(laboratory, 4);
 
-    return res.status(code).json({ message });
+    if(!laboratory){
+      const { code, message } = e.throwException(4, apiExceptions);
+      return res.status(code).json({ message });
+    }
+    return res.status(200).json(laboratory);
   },
   async store(req, res) {
     const createdLabs = [];
