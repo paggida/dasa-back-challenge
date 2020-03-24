@@ -1,3 +1,4 @@
+const Laboratory = require("../models/Laboratory");
 const e = require("../functions/exceptionFunctions");
 const apiExceptions = require("../Exceptions/apiExceptions");
 const labFnc = require("../functions/laboratoryFunctions");
@@ -5,6 +6,20 @@ const valFnc = require("../functions/validationFunctions");
 const ctrlFnc = require("../functions/controllersFunctions");
 
 module.exports = {
+  async show(req, res, next) {
+    const { labId }  = req.params;
+
+    const laboratory = await Laboratory.findById(labId);
+
+    if(!laboratory){
+      const { code, message } = e.throwException(4, apiExceptions);
+      return res.status(code).json({ message });
+    }
+
+    req.laboratory = laboratory;
+
+    return next();
+  },
   async store(req, res, next) {
     let invalidLabsIndex;
     let existentLabsIndex;
@@ -59,6 +74,7 @@ module.exports = {
       const { code, message} = e.throwException(7, apiExceptions);
       return res.status(code).json({ message, position : invalidPosition });
     }else{
+      req.deletedLabs = requestDeletedLabs
       return next();
     }
   }

@@ -14,14 +14,8 @@ module.exports = {
     return res.json(exams);
   },
   async show(req, res) {
-    const { examId } = req.params;
+    const { exam } = req;
 
-    const exam = await Exam.findById(examId).populate(["examTypeCode","laboratoryCode"]);
-
-    if(!exam){
-      const { code, message } = e.throwException(2, apiExceptions);
-      return res.status(code).json({ message });
-    }
     return res.status(200).json(exam);
   },
   async store(req, res) {
@@ -45,8 +39,7 @@ module.exports = {
     return res.json(updatedExams);
   },
   async destroy(req, res) {
-    const { examsIds } = req.params;
-    const deletedExams = ctrlFnc.getIdsArrayByStream(examsIds, "|");
+    const { deletedExams } = req;
 
     for (let id of deletedExams) await Exam.findByIdAndDelete(id);
 
@@ -56,6 +49,11 @@ module.exports = {
     const { examId } = req.params;
 
     const exam = await Exam.findById(examId);
+
+    if(!exam){
+      const { code, message } = e.throwException(2, apiExceptions);
+      return res.status(code).json({ message });
+    }
 
     const newLaboratoryCode = valFnc.mergeArrayWithoutRepeatItem(exam.laboratoryCode, req.body);
     await Exam.findByIdAndUpdate( examId, { laboratoryCode : newLaboratoryCode})
@@ -67,9 +65,10 @@ module.exports = {
 
     const exam = await Exam.findById(examId);
 
-    const { code, message } =  valFnc.getValidatedResponse(exam, 2);
-
-    if(code = 200)
+    if(!exam){
+      const { code, message } = e.throwException(2, apiExceptions);
+      return res.status(code).json({ message });
+    }
 
     req.body.map((item)=> exam.laboratoryCode.remove(item) );
 

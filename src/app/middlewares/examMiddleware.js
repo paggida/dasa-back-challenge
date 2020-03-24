@@ -1,3 +1,4 @@
+const Exam = require("../models/Exam");
 const e = require("../functions/exceptionFunctions");
 const apiExceptions = require("../Exceptions/apiExceptions");
 const examFnc = require("../functions/examFunctions");
@@ -5,6 +6,20 @@ const valFnc = require("../functions/validationFunctions");
 const ctrlFnc = require("../functions/controllersFunctions");
 
 module.exports = {
+  async show(req, res, next) {
+    const { examId } = req.params;
+
+    const exam = await Exam.findById(examId).populate(["examTypeCode","laboratoryCode"]);
+
+    if(!exam){
+      const { code, message } = e.throwException(2, apiExceptions);
+      return res.status(code).json({ message });
+    }
+
+    req.exam = exam;
+
+    return next();
+  },
   async store(req, res, next) {
     let invalidExamsIndex = [];
     let existentExamsIndex = [];
@@ -59,16 +74,14 @@ module.exports = {
       const { code, message} = e.throwException(6, apiExceptions);
       return res.status(code).json({ message, position : invalidPosition });
     }else{
+      req.deletedExams = requestDeletedExams
       return next();
     }
   },
-  linkLaboratory(req, res, next) {
+  async linkAndUnlinkLab(req, res, next) {
+
+
     return next();
-    //return res.status(Code).json({ error: "Token inválido" });
-  },
-  unlinkLaboratory(req, res, next) {
-    return next();
-    //return res.status(Code).json({ error: "Token inválido" });
   },
   getLabsByExamName(req, res, next) {
     return next();

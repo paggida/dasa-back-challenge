@@ -361,8 +361,8 @@
               "$ref": "#/definitions/Error"
             }
           },
-          "405": {
-            "description": "Action canceled! Invalid input at positions:",
+          "404": {
+            "description": "'Action canceled! Exam not found' or 'Action canceled! Laboratory not found at positions:'",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -396,13 +396,7 @@
         ],
         "responses": {
           "404": {
-            "description": "Action canceled! Exam not found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "405": {
-            "description": "Action canceled! Invalid input at positions:",
+            "description": "'Action canceled! Exam not found' or 'Action canceled! Laboratory not found at positions:'",
             "schema": {
               "$ref": "#/definitions/Error"
             }
