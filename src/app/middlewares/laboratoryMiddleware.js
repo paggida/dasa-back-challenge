@@ -7,9 +7,11 @@ module.exports = {
   async store(req, res, next) {
     let invalidLabsId;
     let existentLabsId;
+
     if(Array.isArray(req.body)){
       invalidLabsId = await valFnc.getInvalidObjIndexInArray(req.body, labFnc.isValidLaboratoryObj);
       existentLabsId = await valFnc.getValidObjIndexInArray(req.body, labFnc.isExistentLaboratory);
+
       if(valFnc.isEmptyArray(invalidLabsId) && valFnc.isEmptyArray(existentLabsId)){
         return next();
       }
@@ -17,6 +19,7 @@ module.exports = {
 
     const position = valFnc.mergeArrayWithoutRepeatItem(invalidLabsId, existentLabsId);
     const { code, message} = e.throwException(5, apiExceptions);
+
     return res.status(code).json({ message, position });
   },
   update(req, res, next) {
