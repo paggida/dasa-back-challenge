@@ -26,9 +26,5 @@ module.exports = {
   destroy(req, res, next) {
     return next();
     //return res.status(Code).json({ error: "Token inválido" });
-  },
-  getByExamName(req, res, next) {
-    return next();
-    //return res.status(Code).json({ error: "Token inválido" });
   }
 };

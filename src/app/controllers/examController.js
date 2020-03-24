@@ -55,19 +55,24 @@ module.exports = {
     const newLaboratoryCode = valFnc.mergeArrayWithoutRepeatItem(exam.laboratoryCode, req.body);
     await Exam.findByIdAndUpdate( examId, { laboratoryCode : newLaboratoryCode})
 
-    return res.status(200).json(exam);
+    return res.status(200).send();
   },
   async unlinkLaboratory(req, res) {
     const { examId } = req.params;
 
     const exam = await Exam.findById(examId);
 
-    req.body.map((item)=>{
-      exam.laboratoryCode.remove(item);
-    });
+    req.body.map((item)=> exam.laboratoryCode.remove(item) );
 
     exam.save();
 
     return res.status(200).send();
+  },
+  async getLabsByExamName(req, res) {
+    const { examName: name } = req.params;
+
+    const exams = await Exam.findOne({ name }).populate(["laboratoryCode"]);
+
+    return res.json(exams.laboratoryCode);
   }
 };

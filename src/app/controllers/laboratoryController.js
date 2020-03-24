@@ -46,9 +46,5 @@ module.exports = {
     for (let id of deletedLabs) await Laboratory.findByIdAndDelete(id);
 
     return res.status(200).send();
-  },
-  async getByExamName(req, res) {
-    const { examName } = req.params;
-    return res.json({ examName, message: "Not implemented" });
   }
 };

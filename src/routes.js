@@ -13,8 +13,6 @@ routes.post("/laboratory/store", mdlLab.store, ctrlLaboratory.store);
 routes.put("/laboratory/update", mdlLab.update, ctrlLaboratory.update);
 routes.delete("/laboratory/destroy/:labsIds", mdlLab.destroy, ctrlLaboratory.destroy);
 
-routes.get("/exam/:examName/laboratories", mdlLab.getByExamName, ctrlLaboratory.getByExamName);
-
 routes.get("/exam/index/:status", mdlApi.index, ctrlExam.index);
 routes.get("/exam/show/:examId", ctrlExam.show);
 routes.post("/exam/store", mdlExam.store, ctrlExam.store);
@@ -23,6 +21,7 @@ routes.delete("/exam/destroy/:examsIds", mdlExam.destroy, ctrlExam.destroy);
 
 routes.post("/exam/:examId/linkLaboratory", mdlExam.linkLaboratory, ctrlExam.linkLaboratory);
 routes.delete("/exam/:examId/unlinkLaboratory", mdlExam.unlinkLaboratory, ctrlExam.unlinkLaboratory);
+routes.get("/exam/:examName/laboratories", mdlExam.getLabsByExamName, ctrlExam.getLabsByExamName);
 
 routes.get("/exam/type/index", ctrlExamType.index);
 routes.get("/exam/type/show/:examTypeId", ctrlExamType.show);

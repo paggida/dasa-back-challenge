@@ -35,5 +35,9 @@ module.exports = {
   unlinkLaboratory(req, res, next) {
     return next();
     //return res.status(Code).json({ error: "Token inválido" });
+  },
+  getLabsByExamName(req, res, next) {
+    return next();
+    //return res.status(Code).json({ error: "Token inválido" });
   }
 };

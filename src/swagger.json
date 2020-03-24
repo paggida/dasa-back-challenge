@@ -173,35 +173,6 @@
         }
       }
     },
-    "/exam/{examName}/laboratories": {
-      "get": {
-        "tags": ["Laboratory"],
-        "summary": "Get all the laboratories linked to a specific exam",
-        "description": "",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "examName",
-            "in": "path",
-            "description": "Exam name identification code",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": { "$ref": "#/definitions/ArrayOfLaboratory" }
-          },
-          "404": {
-            "description": "Action canceled! Exam name not found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/exam/index/{status}": {
       "get": {
         "tags": ["Exam"],
@@ -432,6 +403,35 @@
           },
           "405": {
             "description": "Action canceled! Invalid input at positions:",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/exam/{examName}/laboratories": {
+      "get": {
+        "tags": ["Exam"],
+        "summary": "Get all the laboratories linked to a specific exam",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examName",
+            "in": "path",
+            "description": "Exam name identification code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/ArrayOfLaboratory" }
+          },
+          "404": {
+            "description": "Action canceled! Exam name not found",
             "schema": {
               "$ref": "#/definitions/Error"
             }
