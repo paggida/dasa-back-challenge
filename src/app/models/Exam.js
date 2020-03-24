@@ -10,6 +10,10 @@ const ExamSchema = new mongoose.Schema({
     ref: 'ExamType',
     required: true
   },
+  laboratoryCode:[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Laboratory',
+  }],
   status: {
     type: Boolean,
     required: true,

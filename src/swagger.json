@@ -542,14 +542,6 @@
         "createdAt": { "type": "string", "format":"date-time" }
       }
     },
-    "RelExamToLab": {
-      "type": "object",
-      "properties": {
-        "laboratoryCode": { "type": "string" },
-        "examCode": { "type": "string" },
-        "createdAt": { "type": "string", "format":"date-time" }
-      }
-    },
     "ArrayOfLaboratory": {
       "type": "array",
       "items": {

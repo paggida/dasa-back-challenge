@@ -15,7 +15,7 @@ module.exports = {
       }
     }
 
-    const position = valFnc.mergeArrays(invalidLabsId, existentLabsId);
+    const position = valFnc.mergeArrayWithoutRepeatItem(invalidLabsId, existentLabsId);
     const { code, message} = e.throwException(5, apiExceptions);
     return res.status(code).json({ message, position });
   },

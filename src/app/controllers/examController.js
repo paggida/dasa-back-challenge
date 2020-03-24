@@ -1,21 +1,20 @@
-const Exam = require("../models/Exam")
-const ExamToLab = require("../models/RelExamToLab")
-const ctrlFnc = require("../functions/controllersFunctions")
-const valFnc = require("../functions/validationFunctions")
+const Exam = require("../models/Exam");
+const ctrlFnc = require("../functions/controllersFunctions");
+const valFnc = require("../functions/validationFunctions");
 
 module.exports = {
   async index(req, res) {
     const { status } = req.params;
-    const filter     = ctrlFnc.getIndexFilterByStatus(status)
+    const filter     = ctrlFnc.getIndexFilterByStatus(status);
 
-    const exams = await Exam.find(filter).populate("examTypeCode");
+    const exams = await Exam.find(filter).populate(["examTypeCode","laboratoryCode"]);
 
     return res.json(exams);
   },
   async show(req, res) {
     const { examId } = req.params;
 
-    const exam = await Exam.findById(examId).populate("examTypeCode");
+    const exam = await Exam.findById(examId).populate(["examTypeCode","laboratoryCode"]);
     const { code, message } =  valFnc.getValidatedResponse(exam, 2);
 
     return res.status(code).json({ message });
@@ -49,20 +48,25 @@ module.exports = {
     return res.status(200).send();
   },
   async linkLaboratory(req, res) {
-    const { examId: examCode } = req.params;
+    const { examId } = req.params;
 
-    for (let laboratoryCode of req.body) {
-      await ExamToLab.create({ examCode, laboratoryCode});
-    }
+    const exam = await Exam.findById(examId);
 
-    return res.status(200).send();
+    const newLaboratoryCode = valFnc.mergeArrayWithoutRepeatItem(exam.laboratoryCode, req.body);
+    await Exam.findByIdAndUpdate( examId, { laboratoryCode : newLaboratoryCode})
+
+    return res.status(200).json(exam);
   },
   async unlinkLaboratory(req, res) {
-    const { examId: examCode } = req.params;
+    const { examId } = req.params;
 
-    for (let laboratoryCode of req.body) {
-      await ExamToLab.findOneAndDelete({ examCode, laboratoryCode});
-    }
+    const exam = await Exam.findById(examId);
+
+    req.body.map((item)=>{
+      exam.laboratoryCode.remove(item);
+    });
+
+    exam.save();
 
     return res.status(200).send();
   }

@@ -33,10 +33,13 @@ module.exports = {
     }
     return invalidExamsId;
   },
-  mergeArrays(arrayA, ArrayB){
+  mergeArrayWithoutRepeatItem(arrayA, ArrayB){
     const mergeArray = [...arrayA, ...ArrayB]
 
-    var unifiedArray= mergeArray.filter((item, i) => mergeArray.indexOf(item) === i);
+    var unifiedArray= this.removeRepeatedItemsInArray(mergeArray);
     return unifiedArray;
+  },
+  removeRepeatedItemsInArray(array){
+    return array.filter((item, i) => array.indexOf(item) === i);
   }
 };
