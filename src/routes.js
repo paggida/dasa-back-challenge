@@ -1,11 +1,11 @@
 const express        = require("express");
 const routes         = express.Router();
-const ctrlExam       = require("./app/controllers/examController");
-const ctrlExamType   = require("./app/controllers/examTypeController");
-const ctrlLaboratory = require("./app/controllers/laboratoryController");
 const mdlLab         = require("./app/middlewares/laboratoryMiddleware");
 const mdlExam        = require("./app/middlewares/examMiddleware");
 const mdlApi         = require("./app/middlewares/apiMiddleware");
+const ctrlExam       = require("./app/controllers/examController");
+const ctrlExamType   = require("./app/controllers/examTypeController");
+const ctrlLaboratory = require("./app/controllers/laboratoryController");
 
 routes.get("/laboratory/index/:status", mdlApi.index, ctrlLaboratory.index);
 routes.get("/laboratory/show/:labId", mdlLab.show, ctrlLaboratory.show);

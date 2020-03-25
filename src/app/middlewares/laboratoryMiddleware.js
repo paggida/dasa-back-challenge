@@ -1,9 +1,9 @@
-const Laboratory = require("../models/Laboratory");
-const e = require("../functions/exceptionFunctions");
+const Laboratory    = require("../models/Laboratory");
 const apiExceptions = require("../Exceptions/apiExceptions");
-const labFnc = require("../functions/laboratoryFunctions");
-const valFnc = require("../functions/validationFunctions");
-const ctrlFnc = require("../functions/controllersFunctions");
+const e             = require("../functions/exceptionFunctions");
+const labFnc        = require("../functions/laboratoryFunctions");
+const valFnc        = require("../functions/validationFunctions");
+const ctrlFnc       = require("../functions/controllersFunctions");
 
 module.exports = {
   async show(req, res, next) {
@@ -12,6 +12,7 @@ module.exports = {
     const laboratory = await Laboratory.findById(labId);
 
     if(!laboratory){
+      // 404 - Action canceled! Laboratory not found
       const { code, message } = e.throwException(4, apiExceptions);
       return res.status(code).json({ message });
     }
@@ -25,7 +26,7 @@ module.exports = {
     let existentLabsIndex;
 
     if(Array.isArray(req.body)){
-      invalidLabsIndex = await valFnc.getInvalidObjIndexInArray(req.body, labFnc.isValidNewLaboratoryObj);
+      invalidLabsIndex  = await valFnc.getInvalidObjIndexInArray(req.body, labFnc.isValidNewLaboratoryObj);
       existentLabsIndex = await valFnc.getValidObjIndexInArray(req.body, labFnc.isExistentLaboratory);
 
       if(valFnc.isEmptyArray(invalidLabsIndex) && valFnc.isEmptyArray(existentLabsIndex)){
@@ -34,6 +35,7 @@ module.exports = {
     }
 
     const position = valFnc.mergeArrayWithoutRepeatItem(invalidLabsIndex, existentLabsIndex);
+    // 405 - Action canceled! Invalid input at positions:
     const { code, message} = e.throwException(5, apiExceptions);
 
     return res.status(code).json({ message, position });
@@ -46,11 +48,12 @@ module.exports = {
       invalidLabsIndex = await valFnc.getInvalidObjIndexInArray(req.body, labFnc.isValidLaboratoryObj);
 
       if(valFnc.isEmptyArray(invalidLabsIndex)){
-        existentLabsIndex = await valFnc.getValidObjIndexInArray(req.body, labFnc.isExistentLaboratoryById);
+        existentLabsIndex        = await valFnc.getValidObjIndexInArray(req.body, labFnc.isExistentLaboratoryById);
         const positionsInRequest = valFnc.getAllPositionsInArray(req.body);
-        const invalidPosition = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
+        const invalidPosition    = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
 
         if(invalidPosition.length){
+          // 404 - Action canceled! Laboratory not found at positions:
           const { code, message} = e.throwException(7, apiExceptions);
           return res.status(code).json({ message, position : invalidPosition });
         }else{
@@ -58,23 +61,24 @@ module.exports = {
         }
       }
     }
-
+    // 405 - Action canceled! Invalid input at positions:
     const { code, message} = e.throwException(5, apiExceptions);
     return res.status(code).json({ message, position : invalidLabsIndex });
   },
   async destroy(req, res, next){
-    const { labsIds } = req.params;
+    const { labsIds }        = req.params;
     const requestDeletedLabs = ctrlFnc.getIdsArrayByStream(labsIds, "|");
-    const deletedlabsIds = valFnc.convertStringToIdObj(requestDeletedLabs);
+    const deletedlabsIds     = valFnc.convertStringToIdObj(requestDeletedLabs);
     const positionsInRequest = valFnc.getAllPositionsInArray(deletedlabsIds);
-    const existentLabsIndex = await valFnc.getValidObjIndexInArray(deletedlabsIds, labFnc.isExistentLaboratoryById);
-    const invalidPosition = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
+    const existentLabsIndex  = await valFnc.getValidObjIndexInArray(deletedlabsIds, labFnc.isExistentLaboratoryById);
+    const invalidPosition    = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
 
     if(invalidPosition.length){
+      // 404 - Action canceled! Laboratory not found at positions:
       const { code, message} = e.throwException(7, apiExceptions);
       return res.status(code).json({ message, position : invalidPosition });
     }else{
-      req.deletedLabs = requestDeletedLabs
+      req.deletedLabs = requestDeletedLabs;
       return next();
     }
   }

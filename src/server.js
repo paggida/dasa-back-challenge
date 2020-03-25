@@ -1,11 +1,12 @@
-const cors = require("cors");
-const youch = require("youch");
-const express = require("express");
-const mongoose = require('mongoose');
-const dbConfig = require('./config/database')
-const appConfig = require("./config/app");
-const swaggerUi = require("swagger-ui-express");
+const cors            = require("cors");
+const youch           = require("youch");
+const express         = require("express");
+const mongoose        = require('mongoose');
+const dbConfig        = require('./config/database');
+const appConfig       = require("./config/app");
+const swaggerUi       = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
+const routesFile      = require("./routes");
 
 class App {
   constructor() {
@@ -33,7 +34,7 @@ class App {
     this.express.disable("etag");
   }
   routes() {
-    this.express.use(require("./routes"));
+    this.express.use(routesFile);
     this.express.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
   exception() {

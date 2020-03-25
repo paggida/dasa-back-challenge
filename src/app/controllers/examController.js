@@ -1,6 +1,6 @@
-const Exam = require("../models/Exam");
+const Exam    = require("../models/Exam");
 const ctrlFnc = require("../functions/controllersFunctions");
-const valFnc = require("../functions/validationFunctions");
+const valFnc  = require("../functions/validationFunctions");
 
 module.exports = {
   async index(req, res) {
@@ -21,7 +21,7 @@ module.exports = {
 
     for (let exam of req.body) {
       createdExams.push(await Exam.create({ ...exam, status: true}));
-    }
+    };
 
     return res.json(createdExams);
   },
@@ -31,8 +31,8 @@ module.exports = {
     for (let {id, ...exam} of req.body) {
       updatedExams.push(await Exam.findByIdAndUpdate(id, exam, {
         new: true
-      }))
-    }
+      }));
+    };
 
     return res.json(updatedExams);
   },
@@ -44,10 +44,10 @@ module.exports = {
     return res.status(200).send();
   },
   async linkLaboratory(req, res) {
-    const { exam } = req;
-
+    const { exam }          = req;
     const newLaboratoryCode = valFnc.mergeArrayWithoutRepeatItem(exam.laboratoryCode, req.body);
-    await Exam.findByIdAndUpdate( exam.id, { laboratoryCode : newLaboratoryCode})
+
+    await Exam.findByIdAndUpdate( exam.id, { laboratoryCode : newLaboratoryCode});
 
     return res.status(200).send();
   },

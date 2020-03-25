@@ -1,4 +1,4 @@
-const server = require("./server");
+const server    = require("./server");
 const appConfig = require("./config/app");
 
 server.listen(appConfig.AppPort || 3000);

@@ -1,20 +1,20 @@
-const e = require("./exceptionFunctions");
-const statusEnum = require("../enum/statusEnum")
+const e             = require("./exceptionFunctions");
+const statusEnum    = require("../enum/statusEnum");
 const apiExceptions = require("../Exceptions/apiExceptions");
 
 module.exports = {
   getValidatedResponse(obj,emptyErrorCode){
     if(!this.isEmptyObj(obj)){
-      return {code: 200, message: obj}
+      return {code: 200, message: obj};
     }else{
       return e.throwException(emptyErrorCode, apiExceptions);
     }
   },
   isEmptyObj(obj){
-    return (!obj || Object.keys(obj).length === 0)
+    return (!obj || Object.keys(obj).length === 0);
   },
   isEmptyArray(array){
-    return (array.length === 0)
+    return (array.length === 0);
   },
   isValidStatus(status){
     return !!statusEnum[status.toLowerCase()];
@@ -43,7 +43,7 @@ module.exports = {
     return biggerArray.filter((item) => smallArray.indexOf(item) < 0);
   },
   mergeArrayWithoutRepeatItem(arrayA, arrayB){
-    const mergeArray = [...arrayA, ...arrayB]
+    const mergeArray = [...arrayA, ...arrayB];
 
     var unifiedArray= this.removeRepeatedItemsInArray(mergeArray);
     return unifiedArray;
@@ -52,8 +52,6 @@ module.exports = {
     return array.filter((item, i) => array.indexOf(item) === i);
   },
   convertStringToIdObj(array){
-    return array.map(item=>{
-      return { id: item }
-    })
+    return array.map(item=> ({ id: item }));
   }
 };

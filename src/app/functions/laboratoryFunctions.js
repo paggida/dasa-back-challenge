@@ -8,7 +8,7 @@ module.exports = {
     return ((obj.name || obj.Laboratory || obj.status) && obj.id )? true : false;
   },
   async isExistentLaboratory({name, address}){
-    const response = await Laboratory.findOne({ name, address })
+    const response = await Laboratory.findOne({ name, address });
     return response? true : false;
   },
   async isExistentLaboratoryById({ id }){

@@ -1,11 +1,11 @@
 const Laboratory = require("../models/Laboratory");
-const ctrlFnc = require("../functions/controllersFunctions");
+const ctrlFnc    = require("../functions/controllersFunctions");
 
 
 module.exports = {
   async index(req, res) {
     const { status }   = req.params;
-    const filter       = ctrlFnc.getIndexFilterByStatus(status)
+    const filter       = ctrlFnc.getIndexFilterByStatus(status);
 
     const laboratories = await Laboratory.find(filter);
 
@@ -31,8 +31,8 @@ module.exports = {
     for (let {id, ...lab} of req.body) {
       updatedLabs.push(await Laboratory.findByIdAndUpdate(id, lab, {
         new: true
-      }))
-    }
+      }));
+    };
 
     return res.json(updatedLabs);
   },
