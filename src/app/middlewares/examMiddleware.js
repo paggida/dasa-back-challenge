@@ -35,11 +35,11 @@ module.exports = {
       }
     }
 
-    const position = valFnc.mergeArrayWithoutRepeatItem(invalidExamsIndex, existentExamsIndex);
+    const positions = valFnc.mergeArrayWithoutRepeatItem(invalidExamsIndex, existentExamsIndex);
     // 405 - Action canceled! Invalid input at positions:
     const { code, message} = e.throwException(5, apiExceptions);
 
-    return res.status(code).json({ message, position });
+    return res.status(code).json({ message, positions });
   },
   async update(req, res, next) {
     let invalidExamsIndex = [];
@@ -51,12 +51,12 @@ module.exports = {
       if(valFnc.isEmptyArray(invalidExamsIndex)){
         existentExamsIndex       = await valFnc.getValidObjIndexInArray(req.body, examFnc.isExistentExamById);
         const positionsInRequest = valFnc.getAllPositionsInArray(req.body);
-        const invalidPosition    = valFnc.getDifferentItemsInArrays(existentExamsIndex, positionsInRequest);
+        const invalidpPositions    = valFnc.getDifferentItemsInArrays(existentExamsIndex, positionsInRequest);
 
-        if(invalidPosition.length){
+        if(invalidpPositions.length){
           // 404 - Action canceled! Exam not found at positions:
           const { code, message} = e.throwException(6, apiExceptions);
-          return res.status(code).json({ message, position : invalidPosition });
+          return res.status(code).json({ message, positions : invalidPositions });
         }else{
           return next();
         }
@@ -64,7 +64,7 @@ module.exports = {
     }
       // 405 - Action canceled! Invalid input at positions:
       const { code, message} = e.throwException(5, apiExceptions);
-      return res.status(code).json({ message, position : invalidExamsIndex });
+      return res.status(code).json({ message, positions : invalidExamsIndex });
   },
   async destroy(req, res, next) {
     const { examsIds }        = req.params;
@@ -72,12 +72,12 @@ module.exports = {
     const deletedExamsIds     = valFnc.convertStringToIdObj(requestDeletedExams);
     const positionsInRequest  = valFnc.getAllPositionsInArray(deletedExamsIds);
     const existentExamsIndex  = await valFnc.getValidObjIndexInArray(deletedExamsIds, examFnc.isExistentExamById);
-    const invalidPosition     = valFnc.getDifferentItemsInArrays(existentExamsIndex, positionsInRequest);
+    const invalidPositions     = valFnc.getDifferentItemsInArrays(existentExamsIndex, positionsInRequest);
 
-    if(invalidPosition.length){
+    if(invalidPositions.length){
       // 404 - Action canceled! Exam not found at positions:
       const { code, message} = e.throwException(6, apiExceptions);
-      return res.status(code).json({ message, position : invalidPosition });
+      return res.status(code).json({ message, positions : invalidPositions });
     }else{
       req.deletedExams = requestDeletedExams;
       return next();
@@ -97,12 +97,12 @@ module.exports = {
     const objIdArray         = valFnc.convertStringToIdObj(req.body);
     const existentLabsIndex  = await valFnc.getValidObjIndexInArray(objIdArray, labFnc.isExistentLaboratoryById);
     const positionsInRequest = valFnc.getAllPositionsInArray(req.body);
-    const invalidPosition    = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
+    const invalidPositions    = valFnc.getDifferentItemsInArrays(existentLabsIndex, positionsInRequest);
 
-    if(invalidPosition.length){
+    if(invalidPositions.length){
       // 404 - Action canceled! Laboratory not found at positions:
       const { code, message} = e.throwException(7, apiExceptions);
-      return res.status(code).json({ message, position : invalidPosition });
+      return res.status(code).json({ message, positions : invalidPositions });
     }
 
     req.exam = exam;

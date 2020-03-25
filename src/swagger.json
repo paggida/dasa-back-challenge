@@ -128,7 +128,7 @@
             "name": "body",
             "description": "Array of laboratory object that needs to be updated in the repository",
             "required": true,
-            "schema": { "$ref": "#/definitions/ArrayOfLaboratory" }
+            "schema": { "$ref": "#/definitions/ArrayOfUpdatableLaboratory" }
           }
         ],
         "responses": {
@@ -285,7 +285,7 @@
             "name": "body",
             "description": "Array of exam object that needs to be updated in the repository",
             "required": true,
-            "schema": { "$ref": "#/definitions/ArrayOfExam" }
+            "schema": { "$ref": "#/definitions/ArrayOfUpdatableExams" }
           }
         ],
         "responses": {
@@ -524,6 +524,10 @@
         "_id": { "type": "string" },
         "name": { "type": "string" },
         "examTypeCode": { "type": "string" },
+        "laboratoryCode": {
+          "type": "object",
+          "$ref": "#/definitions/ArrayOfIdLaboratories"
+        },
         "status": { "type": "boolean" },
         "createdAt": { "type": "string", "format":"date-time" }
       }
@@ -541,6 +545,18 @@
       "items": {
         "type": "object",
         "$ref": "#/definitions/Laboratory"
+      }
+    },
+    "ArrayOfUpdatableLaboratory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "address": { "type": "string" },
+          "status": { "type": "boolean" }
+        }
       }
     },
     "ArrayOfNewLaboratories": {
@@ -564,6 +580,18 @@
       "items": {
         "type": "object",
         "$ref": "#/definitions/Exam"
+      }
+    },
+    "ArrayOfUpdatableExams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "examTypeCode": { "type": "string" },
+          "status": { "type": "boolean" }
+        }
       }
     },
     "ArrayOfNewExams": {
