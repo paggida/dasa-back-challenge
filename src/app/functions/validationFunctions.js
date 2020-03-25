@@ -17,7 +17,7 @@ module.exports = {
     return (array.length === 0);
   },
   isValidStatus(status){
-    return !!statusEnum[status.toLowerCase()];
+    return !statusEnum[status.toLowerCase()]!== "undefined";
   },
   async getInvalidObjIndexInArray(array, objValidationFnc){
     let invalidExamsId = [];

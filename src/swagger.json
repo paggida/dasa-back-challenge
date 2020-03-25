@@ -365,7 +365,7 @@
         ],
         "responses": {
           "404": {
-            "description": "'Action canceled! Exam not found' or 'Action canceled! Exam type not found' or 'Action canceled! Laboratory not found at positions:'",
+            "description": "'Action canceled! Exam not found at positions:' or 'Action canceled! Exam type not found' or 'Action canceled! Laboratory not found at positions:'",
             	"schema": {
               "$ref": "#/definitions/Error"
             }

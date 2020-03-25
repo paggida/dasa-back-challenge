@@ -29,8 +29,9 @@ module.exports = {
     const updatedLabs = [];
 
     for (let {id, ...lab} of req.body) {
+
       updatedLabs.push(await Laboratory.findByIdAndUpdate(id, lab, {
-        new: true
+        new: false
       }));
     };
 
