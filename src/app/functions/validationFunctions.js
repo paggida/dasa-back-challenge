@@ -53,5 +53,8 @@ module.exports = {
   },
   convertStringToIdObj(array){
     return array.map(item=> ({ id: item }));
-  }
+  },
+  setIndexArrayAttributeInArrayByItem(item, indexArray){
+    return {...item, indexArray };
+  },
 };

@@ -37,7 +37,12 @@ module.exports = {
         return res.status(code).json({ message, positions : existentExamsIndex });
       }
 
-      //existentExamTypesIndex  = await valFnc.getInvalidObjIndexInArray(req.body, examFnc.isExistentExamTypeById);
+      const existentExamTypesIndex  = await examTypeFnc.getInvalidExamTypeObjIndexInObjExamArray(req.body);
+      if(existentExamTypesIndex.length){
+        // 404 - Action canceled! Exam type not found
+        const { code, message} = e.throwException(8, apiExceptions);
+        return res.status(code).json({ message, positions : existentExamTypesIndex });
+      }
 
         const inactiveLabsIndex  = await labFnc.getInactiveLaboratoryObjIndexInObjExamArray(req.body);
 

@@ -1,4 +1,5 @@
 const Laboratory = require("../models/Laboratory")
+const valFnc     = require("../functions/validationFunctions");
 
 module.exports = {
   isValidNewLaboratoryObj(obj){
@@ -35,9 +36,6 @@ module.exports = {
       return (labolaboratoryCode.length)? true : false;
     }
   },
-  setIndexArrayAttributeInArrayByItem(item, indexArray){
-    return {...item, indexArray };
-  },
   async isAllActiveLaboratoryCode(laboratoryCodeArray, inactiveLabsCodeArray){
     let inactiveLaboratoryCode= [];
 
@@ -59,13 +57,12 @@ module.exports = {
     let invalidIndex = [];
 
     const validatedExamsArray = examsArray
-      .map((item, index)=> this.setIndexArrayAttributeInArrayByItem(item, index))
+      .map((item, index)=> valFnc.setIndexArrayAttributeInArrayByItem(item, index))
       .filter(({ laboratoryCode })=> this.isValidLablaboratoryCode(laboratoryCode));
 
     for (let { indexArray, laboratoryCode } of validatedExamsArray) {
       if(!await this.isAllActiveLaboratoryCode(laboratoryCode, inactiveLabCodes)){
         invalidIndex.push(indexArray);
-      }else{
       };
     };
 
