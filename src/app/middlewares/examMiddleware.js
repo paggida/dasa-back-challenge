@@ -62,7 +62,6 @@ module.exports = {
         return next();
       }
     }
-
     // 405 - Action canceled! Invalid input at positions:
     const { code, message} = e.throwException(5, apiExceptions);
 
@@ -78,15 +77,36 @@ module.exports = {
       if(valFnc.isEmptyArray(invalidExamsIndex)){
         existentExamsIndex       = await valFnc.getValidObjIndexInArray(req.body, examFnc.isExistentExamById);
         const positionsInRequest = valFnc.getAllPositionsInArray(req.body);
-        const invalidpPositions    = valFnc.getDifferentItemsInArrays(existentExamsIndex, positionsInRequest);
 
-        if(invalidpPositions.length){
+        const invalidPositions    = valFnc.getDifferentItemsInArrays(existentExamsIndex, positionsInRequest);
+        if(invalidPositions.length){
           // 404 - Action canceled! Exam not found at positions:
           const { code, message} = e.throwException(6, apiExceptions);
           return res.status(code).json({ message, positions : invalidPositions });
-        }else{
-          return next();
         }
+
+        const existentExamTypesIndex  = await examTypeFnc.getInvalidExamTypeObjIndexInObjExamArray(req.body);
+        if(existentExamTypesIndex.length){
+            // 404 - Action canceled! Exam type not found
+            const { code, message} = e.throwException(8, apiExceptions);
+            return res.status(code).json({ message, positions : existentExamTypesIndex });
+        }
+
+        const unknowntLabsIndex  = await labFnc.getExistentLaboratoryObjIndexInObjExamArray(req.body);
+        if(unknowntLabsIndex.length){
+          // 404 - Action canceled! Laboratory not found at positions:
+          const { code, message} = e.throwException(4, apiExceptions);
+          return res.status(code).json({ message, positions : unknowntLabsIndex });
+        }
+
+        const inactiveLabsIndex  = await labFnc.getInactiveLaboratoryObjIndexInObjExamArray(req.body);
+        if(inactiveLabsIndex.length){
+          // 405 - Action canceled! Inactive laboratory at positions:
+          const { code, message} = e.throwException(10, apiExceptions);
+          return res.status(code).json({ message, positions : inactiveLabsIndex });
+        }
+
+        return next();
       }
     }
       // 405 - Action canceled! Invalid input at positions:
