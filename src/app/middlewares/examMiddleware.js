@@ -102,8 +102,17 @@ module.exports = {
     req.exam = exam;
     return next();
   },
-  getLabsByExamName(req, res, next) {
+  async getLabsByExamName(req, res, next) {
+    const { examName: name } = req.params;
+
+    const exam = await Exam.findOne({ name }).populate(["laboratoryCode"]);
+
+    if(!exam){
+      const { code, message } = e.throwException(3, apiExceptions);
+      return res.status(code).json({ message });
+    }
+
+    req.exam = exam;
     return next();
-    //return res.status(Code).json({ error: "Token inválido" });
   }
 };

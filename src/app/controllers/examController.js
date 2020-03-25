@@ -1,6 +1,4 @@
 const Exam = require("../models/Exam");
-const e = require("../functions/exceptionFunctions");
-const apiExceptions = require("../Exceptions/apiExceptions");
 const ctrlFnc = require("../functions/controllersFunctions");
 const valFnc = require("../functions/validationFunctions");
 
@@ -63,10 +61,8 @@ module.exports = {
     return res.status(200).send();
   },
   async getLabsByExamName(req, res) {
-    const { examName: name } = req.params;
+    const { exam } = req;
 
-    const exams = await Exam.findOne({ name }).populate(["laboratoryCode"]);
-
-    return res.json(exams.laboratoryCode);
+    return res.json(exam.laboratoryCode);
   }
 };
