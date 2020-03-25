@@ -52,8 +52,30 @@ module.exports = {
 
     return !inactiveLaboratoryCode.length;
   },
+  async isAllExistentLaboratoryCode(laboratoryCodeArray, unknownLabsCodeArray){
+    let unknownLaboratoryCode= [];
+
+    for (let id of laboratoryCodeArray) {
+      if(unknownLabsCodeArray.indexOf(id) < 0){
+        if(!await this.isExistentLaboratoryById({ id })){
+          unknownLabsCodeArray.push(id);
+          unknownLaboratoryCode.push(id);
+        }
+      }else{
+        unknownLaboratoryCode.push(id);
+      };
+    };
+
+    return !unknownLaboratoryCode.length;
+  },
   async getInactiveLaboratoryObjIndexInObjExamArray(examsArray){
-    let inactiveLabCodes = [];
+    return await this.getLaboratoryObjIndexInObjExamArrayByFunction(this, examsArray, "isAllActiveLaboratoryCode");
+  },
+  async getExistentLaboratoryObjIndexInObjExamArray(examsArray){
+    return await this.getLaboratoryObjIndexInObjExamArrayByFunction(this, examsArray, "isAllExistentLaboratoryCode");
+  },
+  async getLaboratoryObjIndexInObjExamArrayByFunction(thisobj, examsArray, fnc){
+    let verifiedLabCodes = [];
     let invalidIndex = [];
 
     const validatedExamsArray = examsArray
@@ -61,12 +83,13 @@ module.exports = {
       .filter(({ laboratoryCode })=> this.isValidLablaboratoryCode(laboratoryCode));
 
     for (let { indexArray, laboratoryCode } of validatedExamsArray) {
-      if(!await this.isAllActiveLaboratoryCode(laboratoryCode, inactiveLabCodes)){
+      if(!await thisobj[fnc](laboratoryCode, verifiedLabCodes)){
         invalidIndex.push(indexArray);
       };
     };
 
     return invalidIndex;
   }
+
 };
 

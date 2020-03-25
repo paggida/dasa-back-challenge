@@ -44,17 +44,23 @@ module.exports = {
         return res.status(code).json({ message, positions : existentExamTypesIndex });
       }
 
-        const inactiveLabsIndex  = await labFnc.getInactiveLaboratoryObjIndexInObjExamArray(req.body);
+      const unknowntLabsIndex  = await labFnc.getExistentLaboratoryObjIndexInObjExamArray(req.body);
+      if(unknowntLabsIndex.length){
+        // 404 - Action canceled! Laboratory not found at positions:
+        const { code, message} = e.throwException(4, apiExceptions);
+        return res.status(code).json({ message, positions : unknowntLabsIndex });
+      }
 
-        if(inactiveLabsIndex.length){
-          // 405 - Action canceled! Inactive laboratory at positions:
-          const { code, message} = e.throwException(10, apiExceptions);
-          return res.status(code).json({ message, positions : inactiveLabsIndex });
-        }
+      const inactiveLabsIndex  = await labFnc.getInactiveLaboratoryObjIndexInObjExamArray(req.body);
+      if(inactiveLabsIndex.length){
+        // 405 - Action canceled! Inactive laboratory at positions:
+        const { code, message} = e.throwException(10, apiExceptions);
+        return res.status(code).json({ message, positions : inactiveLabsIndex });
+      }
 
-        if(valFnc.isEmptyArray(invalidExamsIndex)){
-          return next();
-        }
+      if(valFnc.isEmptyArray(invalidExamsIndex)){
+        return next();
+      }
     }
 
     // 405 - Action canceled! Invalid input at positions:
