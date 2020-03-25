@@ -298,7 +298,7 @@
             }
           },
           "405": {
-            "description": "'Action canceled! Invalid input at positions:' or 'Action canceled! Inactive laboratory at positions:'",
+            "description": "'Action canceled! Input already existent at positions:' or 'Action canceled! Invalid input at positions:' or 'Action canceled! Inactive laboratory at positions:'",
             "schema": {
               "$ref": "#/definitions/Error"
             }

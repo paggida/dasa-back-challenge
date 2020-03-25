@@ -2,6 +2,7 @@ const Exam          = require("../models/Exam");
 const apiExceptions = require("../Exceptions/apiExceptions");
 const e             = require("../functions/exceptionFunctions");
 const examFnc       = require("../functions/examFunctions");
+const examTypeFnc   = require("../functions/examTypeFunctions");
 const labFnc        = require("../functions/laboratoryFunctions");
 const valFnc        = require("../functions/validationFunctions");
 const ctrlFnc       = require("../functions/controllersFunctions");
@@ -24,30 +25,37 @@ module.exports = {
   },
   async store(req, res, next) {
     let invalidExamsIndex  = [];
-    let existentExamsIndex = [];
 
     if(Array.isArray(req.body)){
       invalidExamsIndex  = await valFnc.getInvalidObjIndexInArray(req.body, examFnc.isValidNewExamObj);
-      existentExamsIndex = await valFnc.getValidObjIndexInArray(req.body, examFnc.isExistentExam);
 
-      const inactiveLabsIndex  = await labFnc.getInactiveLaboratoryObjIndexInObjExamArray(req.body);
 
-      if(inactiveLabsIndex.length){
-        // 405 - Action canceled! Inactive laboratory at positions:
-        const { code, message} = e.throwException(10, apiExceptions);
-        return res.status(code).json({ message, positions : inactiveLabsIndex });
+      const existentExamsIndex = await valFnc.getValidObjIndexInArray(req.body, examFnc.isExistentExam);
+      if(existentExamsIndex.length){
+        // 405 - Action canceled! Input already existent at positions:
+        const { code, message} = e.throwException(11, apiExceptions);
+        return res.status(code).json({ message, positions : existentExamsIndex });
       }
 
-      if(valFnc.isEmptyArray(invalidExamsIndex) && valFnc.isEmptyArray(existentExamsIndex)){
-        return next();
-      }
+      //existentExamTypesIndex  = await valFnc.getInvalidObjIndexInArray(req.body, examFnc.isExistentExamTypeById);
+
+        const inactiveLabsIndex  = await labFnc.getInactiveLaboratoryObjIndexInObjExamArray(req.body);
+
+        if(inactiveLabsIndex.length){
+          // 405 - Action canceled! Inactive laboratory at positions:
+          const { code, message} = e.throwException(10, apiExceptions);
+          return res.status(code).json({ message, positions : inactiveLabsIndex });
+        }
+
+        if(valFnc.isEmptyArray(invalidExamsIndex)){
+          return next();
+        }
     }
 
-    const positions = valFnc.mergeArrayWithoutRepeatItem(invalidExamsIndex, existentExamsIndex);
     // 405 - Action canceled! Invalid input at positions:
     const { code, message} = e.throwException(5, apiExceptions);
 
-    return res.status(code).json({ message, positions });
+    return res.status(code).json({ message, positions: invalidExamsIndex });
   },
   async update(req, res, next) {
     let invalidExamsIndex = [];
