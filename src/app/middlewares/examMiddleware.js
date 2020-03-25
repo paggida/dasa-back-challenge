@@ -30,6 +30,14 @@ module.exports = {
       invalidExamsIndex  = await valFnc.getInvalidObjIndexInArray(req.body, examFnc.isValidNewExamObj);
       existentExamsIndex = await valFnc.getValidObjIndexInArray(req.body, examFnc.isExistentExam);
 
+      const inactiveLabsIndex  = await labFnc.getInactiveLaboratoryObjIndexInObjExamArray(req.body);
+
+      if(inactiveLabsIndex.length){
+        // 405 - Action canceled! Inactive laboratory at positions:
+        const { code, message} = e.throwException(10, apiExceptions);
+        return res.status(code).json({ message, positions : inactiveLabsIndex });
+      }
+
       if(valFnc.isEmptyArray(invalidExamsIndex) && valFnc.isEmptyArray(existentExamsIndex)){
         return next();
       }
@@ -94,6 +102,12 @@ module.exports = {
       return res.status(code).json({ message });
     }
 
+    if(!exam.status){
+      // 405 - Action canceled! Exam is inactive
+      const { code, message } = e.throwException(9, apiExceptions);
+      return res.status(code).json({ message });
+    }
+
     const objIdArray         = valFnc.convertStringToIdObj(req.body);
     const existentLabsIndex  = await valFnc.getValidObjIndexInArray(objIdArray, labFnc.isExistentLaboratoryById);
     const positionsInRequest = valFnc.getAllPositionsInArray(req.body);
@@ -103,6 +117,13 @@ module.exports = {
       // 404 - Action canceled! Laboratory not found at positions:
       const { code, message} = e.throwException(7, apiExceptions);
       return res.status(code).json({ message, positions : invalidPositions });
+    }
+
+    const inactiveLabsIndex  = await labFnc.getInactiveLaboratoryInArray(existentLabsIndex,objIdArray);
+    if(inactiveLabsIndex.length){
+      // 405 - Action canceled! Inactive laboratory at positions:
+      const { code, message} = e.throwException(10, apiExceptions);
+      return res.status(code).json({ message, positions : inactiveLabsIndex });
     }
 
     req.exam = exam;

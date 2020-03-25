@@ -7,12 +7,12 @@
   },
   "host": "localhost:3030",
   "tags": [
+    { "name": "ExamType", "description": "Features to handle de exam type data." },
+    { "name": "Exam", "description": "Features to handle de exam data." },
     {
       "name": "Laboratory",
       "description": "Features to handle de laboratory data."
-    },
-    { "name": "Exam", "description": "Features to handle de exam data." },
-    { "name": "ExamType", "description": "Features to handle de exam type data." }
+    }
   ],
   "schemes": ["http"],
   "paths": {
@@ -176,7 +176,7 @@
     "/exam/index/{status}": {
       "get": {
         "tags": ["Exam"],
-        "summary": "List of all registered exams",
+        "summary": "List of all registered active exams",
         "description": "",
         "produces": ["application/json"],
         "parameters": [
@@ -238,6 +238,35 @@
         }
       }
     },
+    "/exam/{examName}/laboratories": {
+      "get": {
+        "tags": ["Exam"],
+        "summary": "Get all the laboratories linked to a specific exam",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examName",
+            "in": "path",
+            "description": "Exam name identification code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/ArrayOfLaboratory" }
+          },
+          "404": {
+            "description": "Action canceled! Exam name not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/exam/store": {
       "post": {
         "tags": ["Exam"],
@@ -262,8 +291,54 @@
               "$ref": "#/definitions/ArrayOfExam"
             }
           },
+          "404": {
+            "description": "'Action canceled! Exam type not found' or 'Action canceled! Laboratory not found at positions:'",
+            	"schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
           "405": {
-            "description": "Action canceled! Invalid input at positions:",
+            "description": "'Action canceled! Invalid input at positions:' or 'Action canceled! Inactive laboratory at positions:'",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/exam/{examId}/linkLaboratory": {
+      "post": {
+        "tags": ["Exam"],
+        "summary": "Link one or more laboratories to a specific exam",
+        "description": "",
+        "operationId": "linkLaboratory",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "examId",
+            "in": "path",
+            "description": "Exam identification code",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Array of id laboratory that needs to be link",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ArrayOfIdLaboratories" }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "'Action canceled! Exam not found' or 'Action canceled! Laboratory not found at positions:'",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "405": {
+            "description": "'Action canceled! Exam is inactive' or 'Action canceled! Inactive laboratory at positions:'",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -290,8 +365,8 @@
         ],
         "responses": {
           "404": {
-            "description": "Action canceled! Exam not found at positions:",
-            "schema": {
+            "description": "'Action canceled! Exam not found' or 'Action canceled! Laboratory not found at positions:'",
+            	"schema": {
               "$ref": "#/definitions/Error"
             }
           },
@@ -330,46 +405,6 @@
         }
       }
     },
-    "/exam/{examId}/linkLaboratory": {
-      "post": {
-        "tags": ["Exam"],
-        "summary": "Link one or more laboratories to a specific exam",
-        "description": "",
-        "operationId": "linkLaboratory",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "examId",
-            "in": "path",
-            "description": "Exam identification code",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Array of id laboratory that needs to be link",
-            "required": true,
-            "schema": { "$ref": "#/definitions/ArrayOfIdLaboratories" }
-          }
-        ],
-        "responses": {
-          "404": {
-            "description": "Action canceled! Exam not found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "'Action canceled! Exam not found' or 'Action canceled! Laboratory not found at positions:'",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/exam/{examId}/unlinkLaboratory": {
       "delete": {
         "tags": ["Exam"],
@@ -400,32 +435,9 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
-          }
-        }
-      }
-    },
-    "/exam/{examName}/laboratories": {
-      "get": {
-        "tags": ["Exam"],
-        "summary": "Get all the laboratories linked to a specific exam",
-        "description": "",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "examName",
-            "in": "path",
-            "description": "Exam name identification code",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": { "$ref": "#/definitions/ArrayOfLaboratory" }
           },
-          "404": {
-            "description": "Action canceled! Exam name not found",
+          "405": {
+            "description": "'Action canceled! Exam is inactive' or 'Action canceled! Inactive laboratory at positions:'",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -452,7 +464,7 @@
     "/exam/type/show/{examTypeId}": {
       "get": {
         "tags": ["ExamType"],
-        "summary": "Get data about a specific type txam",
+        "summary": "Get data about a specific type exam",
         "description": "",
         "produces": ["application/json"],
         "parameters": [
@@ -590,6 +602,10 @@
           "id": { "type": "string" },
           "name": { "type": "string" },
           "examTypeCode": { "type": "string" },
+          "laboratoryCode": {
+            "type": "object",
+            "$ref": "#/definitions/ArrayOfIdLaboratories"
+          },
           "status": { "type": "boolean" }
         }
       }
@@ -600,7 +616,11 @@
         "type": "object",
         "properties": {
           "name": { "type": "string" },
-          "examTypeCode": { "type": "string" }
+          "examTypeCode": { "type": "string" },
+          "laboratoryCode": {
+            "type": "object",
+            "$ref": "#/definitions/ArrayOfIdLaboratories"
+          }
         }
       }
     },

@@ -6,5 +6,7 @@ module.exports = [
   { id: 5, code: 405, message: "Action canceled! Invalid input at positions:"},
   { id: 6, code: 404, message: "Action canceled! Exam not found at positions:"},
   { id: 7, code: 404, message: "Action canceled! Laboratory not found at positions:"},
-  { id: 8, code: 404, message: "Action canceled! Exam type not found" }
+  { id: 8, code: 404, message: "Action canceled! Exam type not found" },
+  { id: 9, code: 405, message: "Action canceled! Exam is inactive" },
+  { id: 10, code: 405, message: "Action canceled! Inactive laboratory at positions:" }
 ];

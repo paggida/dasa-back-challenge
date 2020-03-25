@@ -5,7 +5,7 @@ module.exports = {
     return (obj.name && obj.examTypeCode)? true : false;
   },
   isValidExamObj(obj){
-    return ((obj.name || obj.examTypeCode || obj.examTypeCode || obj.status) && obj.id )? true : false;
+    return ((obj.name || obj.examTypeCode || obj.examTypeCode || obj.status || !obj.status) && obj.id )? true : false;
   },
   async isExistentExam({name, examTypeCode}){
     const response = await Exam.findOne({ name, examTypeCode })
