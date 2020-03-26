@@ -132,6 +132,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "successful operation"
+          },
           "404": {
             "description": "Action canceled! Laboratory not found at positions:",
             "schema": {
@@ -164,6 +167,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "successful operation"
+          },
           "404": {
             "description": "Action canceled! Laboratory not found at positions:",
             "schema": {
@@ -331,6 +337,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "successful operation"
+          },
           "404": {
             "description": "'Action canceled! Exam not found' or 'Action canceled! Laboratory not found at positions:'",
             "schema": {
@@ -364,6 +373,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "successful operation"
+          },
           "404": {
             "description": "'Action canceled! Exam not found at positions:' or 'Action canceled! Exam type not found' or 'Action canceled! Laboratory not found at positions:'",
             	"schema": {
@@ -396,6 +408,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "successful operation"
+          },
           "404": {
             "description": "Action canceled! Exam not found at positions:",
             "schema": {
@@ -430,6 +445,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "successful operation"
+          },
           "404": {
             "description": "'Action canceled! Exam not found' or 'Action canceled! Laboratory not found at positions:'",
             "schema": {
