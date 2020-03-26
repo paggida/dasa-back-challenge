@@ -1,8 +1,9 @@
-const user = "";
-const psw  = "";
-const host = "localhost";
-const port = "27017";
-const db   = "DasaDB";
+const user             = "";
+const psw              = "";
+const host             = "localhost";
+const port             = "27017";
+const db               = "DasaDB";
+const defaultExamTypes =  [ "Análise clínica", "Imagem" ];
 
 module.exports = {
   uri(){
@@ -10,9 +11,6 @@ module.exports = {
     return `mongodb://${login}${host}:${port}/${db}`
   },
   getDefaultExamTypes(){
-    return [
-      "Análise clínica",
-      "Imagem"
-    ]
+    return defaultExamTypes;
   }
 }
