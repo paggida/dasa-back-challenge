@@ -92,6 +92,13 @@ module.exports = {
             return res.status(code).json({ message, positions : existentExamTypesIndex });
         }
 
+        const inactiveExamsIndex  = await examFnc.getInactiveExamObjIndexInObjExamArray(req.body);
+        if(inactiveExamsIndex.length){
+          // 405 - Action canceled! Inactive exam at positions:
+          const { code, message} = e.throwException(12, apiExceptions);
+          return res.status(code).json({ message, positions : inactiveExamsIndex });
+        }
+
         const unknowntLabsIndex  = await labFnc.getExistentLaboratoryObjIndexInObjExamArray(req.body);
         if(unknowntLabsIndex.length){
           // 404 - Action canceled! Laboratory not found at positions:

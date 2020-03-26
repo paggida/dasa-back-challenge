@@ -13,16 +13,19 @@ module.exports = {
     let validExamTypeCodes = [];
     let invalidIndex = [];
 
+
     const validatedExamsArray = examsArray
       .map((item, index)=> valFnc.setIndexArrayAttributeInArrayByItem(item, index))
-      .filter(({ examTypeCode })=> this.isValidExamTypeCode(examTypeCode));
+      .filter(exam=> this.isValidExamTypeCode(exam.examTypeCode));
 
-    for (let { indexArray, examTypeCode: id } of validatedExamsArray) {
-      if(validExamTypeCodes.indexOf(id) < 0){
-        if(!await this.isExistentExamTypeById({ id })){
-          invalidIndex.push(indexArray);
+    if(!validatedExamsArray.length) return examsArray.map((exam, index)=>index);
+
+    for (let exam of validatedExamsArray) {
+      if(validExamTypeCodes.indexOf(exam.examTypeCode) < 0){
+        if(!await this.isExistentExamTypeById({ id : exam.examTypeCode })){
+          invalidIndex.push(exam.indexArray);
         }else{
-          validExamTypeCodes.push(id)
+          validExamTypeCodes.push(exam.examTypeCode)
         };
       }
     };

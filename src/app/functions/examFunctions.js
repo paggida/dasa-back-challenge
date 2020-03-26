@@ -14,6 +14,32 @@ module.exports = {
   async isExistentExamById({ id }){
     const response = await Exam.findById(id);
     return response? true : false;
+  },
+  isChangedToActive(exam){
+    return exam.status? true : false;
+  },
+  arethereLinkedLaboratories(exam){
+    if(exam.laboratoryCode){
+        return exam.laboratoryCode.length > 0;
+    }
+    return false;
+  },
+  isActiveExam(exam){
+    return exam.status;
+  },
+  async getInactiveExamObjIndexInObjExamArray(examsArray){
+    let inactiveExams = [];
+
+    for (const [index, changedExam] of examsArray.entries()) {
+      if(!this.isChangedToActive(changedExam) && this.arethereLinkedLaboratories(changedExam)){
+        const originalExam = await Exam.findById(changedExam.id);
+        if(!this.isActiveExam(originalExam)){
+          inactiveExams.push(index);
+        };
+      };
+    };
+
+    return inactiveExams;
   }
 };
 
