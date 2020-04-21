@@ -4,42 +4,28 @@ API for maintenance of laboratories and exams.
 ## Technologies used
 - NodeJs in API.
 - MongoDB in data base.
+- Docker
 
 ## Prerequisite
-It's necessary that in the application environment you've:<br>
-- MongoDB (https://www.mongodb.com/).
-- NodeJs (https://nodejs.org/en/).
-- Dependency management, you may choose Yarn (https://yarnpkg.com/lang/en/) or NPM (It come with Node's installation).
+It's necessary that in the application environment you've the Docker service (https://www.docker.com/) installed and running.
 
 ## Installation*
 
 For the correct operation of the application, it's necessary to perform the following procedures:<br>
 
-- Load libraries for project using the commands below in project directory, it's corresponding to your dependency management:
+- Build the application container using the commands below in project directory:
 
-      yarn
-
-  or
-
-       npm install
+      docker-compose build
 
 *&#42; This topic is detailed in docs path of this repository.*
 
 ## Usage
 
-At the root of project path use the command below, it's corresponding to your dependency management:
+At the root of project path use the command below to up the project structure in docker:
 
-     yarn start
+     docker-compose up
 
-or
-
-    npm run start
-
-The console will display the link  `API documentation: <API Documentation url>` to a swagger documentation. If it's the first time that you use the application, follow the next steps:
-- In the swagger documentation, go th the endpoint `/exam/type/install`;
-- Click in the button `Try it out`;
-- Click the button `Execute`;
-- Now your application is ready to use.
+The console will display the link  `API documentation: <API Documentation url>` to a swagger documentation and your application is ready to use.
 
 ## Functionality
 
