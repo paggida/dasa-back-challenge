@@ -2,6 +2,15 @@ const ExamType = require("../models/ExamType");
 const valFnc   = require("../functions/validationFunctions");
 
 module.exports = {
+  async initializeDatabase(){
+    const examTypes = await ExamType.find();
+    const defaultExamType = ExamType.getDefaultExamTypes();
+
+    if(examTypes.length !== defaultExamType.length){
+      if(!valFnc.isEmptyArray(examTypes)) ExamType.remove({})
+      for (let description of defaultExamType) await ExamType.create({ description });
+    }
+  },
   async isExistentExamTypeById({ id }){
     const response = await ExamType.findById(id);
     return response? true : false;

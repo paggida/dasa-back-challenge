@@ -24,6 +24,8 @@ class App {
       useUnifiedTopology: true,
       useFindAndModify: false
     })
+
+    dbConfig.initializeDatabases();
   }
   middlewares() {
     this.express.use(express.json());

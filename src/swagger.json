@@ -507,34 +507,6 @@
           }
         }
       }
-    },
-    "/exam/type/install": {
-      "post": {
-        "tags": ["ExamType"],
-        "summary": "Initializes the repository with the standard exam types of the application",
-        "description": "",
-        "operationId": "store",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/exam/type/uninstall": {
-      "delete": {
-        "tags": ["ExamType"],
-        "summary": "Removes the repository with the standard exam types of the application",
-        "description": "",
-        "operationId": "destroy",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "successful operation"
-          }
-        }
-      }
     }
   },
   "definitions": {

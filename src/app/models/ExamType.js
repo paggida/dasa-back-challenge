@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const defaultExamTypes =  [ "Análise clínica", "Imagem" ];
 
 const ExamTypeSchema = new mongoose.Schema({
   description: {
@@ -10,5 +11,11 @@ const ExamTypeSchema = new mongoose.Schema({
     default: Date.now
   }
 })
+
+ExamTypeSchema.statics = {
+  getDefaultExamTypes () {
+    return defaultExamTypes;
+  }
+}
 
 module.exports = mongoose.model('ExamType', ExamTypeSchema)

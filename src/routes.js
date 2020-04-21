@@ -25,7 +25,5 @@ routes.get("/exam/:examName/laboratories", mdlExam.getLabsByExamName, ctrlExam.g
 
 routes.get("/exam/type/index", ctrlExamType.index);
 routes.get("/exam/type/show/:examTypeId", ctrlExamType.show);
-routes.post("/exam/type/install", ctrlExamType.store);
-routes.delete("/exam/type/uninstall", ctrlExamType.destroy);
 
 module.exports = routes;
