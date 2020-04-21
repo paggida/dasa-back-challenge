@@ -1,4 +1,4 @@
 module.exports = {
-      AppPort: 3030,
+      AppPort: 3000,
   Environment: "development"
 };

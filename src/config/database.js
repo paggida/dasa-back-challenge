@@ -1,6 +1,6 @@
 const user             = "";
 const psw              = "";
-const host             = "localhost";
+const host             = "db-mongo-dasa";
 const port             = "27017";
 const db               = "DasaDB";
 const defaultExamTypes =  [ "Análise clínica", "Imagem" ];
